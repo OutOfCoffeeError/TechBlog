@@ -1,7 +1,10 @@
 <?php
 
 use App\Helpers\CommonHelper;
+// use Illuminate\Filesystem\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +30,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('post', 'PostController');
+
+Route::get('/tokencallback', function(Request $request) {
+    Cache::put('cachekey', "CACHE VALUE");
+
+    return $request->fullUrl();
+    // return view('pages.auth.oauthcallback');
+});
+
+Route::get('/getcache', function () {
+    return Cache::get('cachekey', 'default');
+});

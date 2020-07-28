@@ -1,5 +1,5 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
-    <div class="container">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm navbar-custom">
+    <div class="container-fluid">
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
@@ -16,9 +16,8 @@
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a href="{{ url('/post/create') }}" class="btn btn-primary mr-5">Post+</a>
-                </li>
+
+
                 <!-- Authentication Links -->
                 @guest
                 <li class="nav-item">
@@ -30,6 +29,14 @@
                 </li>
                 @endif
                 @else
+                @if (Route::currentRouteAction()=='')
+                <li class="nav-item">
+                    <a href="{{ url('/home') }}" class="mr-5"><i class="fa fa-home" style="font-size: 35px;"></i></a>
+                </li>
+                @endif
+                <li class="nav-item">
+                    <a href="{{ url('/post/create') }}" class="mr-5"><i class="fa fa-pencil-square-o mt-1" style="font-size: 30px;"></i></a>
+                </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

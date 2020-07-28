@@ -8,9 +8,16 @@ use App\PostMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PostDetail;
 
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +32,7 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {   
+    {
         return view('pages.createpost');
     }
 
@@ -39,30 +46,32 @@ class PostController extends Controller
     {
         // Validate input
         $this->validate($request, [
+            'subject' => 'required',
             'title' => 'required',
-            'body' => 'required',
+            'ckcontentbody' => 'required',
             'tags' => 'required'
         ]);
 
         // Initiate a database transaction
-        DB::transaction(function()  use ($request) {
+        DB::transaction(function ()  use ($request) {
             $postMaster = new PostMaster();
             $postDetail = new PostDetails();
             $postId = null;
             // Create an unique post id after checking it against database post entries
-            while(true) {
+            while (true) {
                 $postId = CommonHelper::generateB64Token(config('constants.post_id_length'));
-                if(PostMaster::where('pid', '=', $postId)->count() == 0) {
+                if (PostMaster::where('pid', '=', $postId)->count() == 0) {
                     break;
                 }
             }
             //Save post data to post detail table
             $postDetail->pid = $postId;
             $postDetail->title = $request->input('title');
-            $postDetail->content = $request->input('body');
+            $postDetail->content = $request->input('ckcontentbody');
             $postDetail->tags = $request->input('tags');
+            $postDetail->subject = $request->input('subject');
             $postDetail->save();
-            
+
             //Save post data to post master table
             $postMaster->pid = $postId;
             $postMaster->author = Auth::user()->id;
@@ -79,9 +88,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($pid)
     {
-        //
+        $post = DB::select(config('query.getpost'), [$pid, Auth::user()->id]);
+        // return $post;
+        return view('pages.postview')->with('post', $post[0]);
     }
 
     /**
@@ -90,9 +101,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($pid)
     {
-        //
+        $post = PostDetails::where('pid', $pid)->get();
+        if (count($post) < 1) {
+            return redirect('home');
+        }
+        return view('pages.postedit')->with('post', $post[0]);
     }
 
     /**
@@ -115,6 +130,22 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return DB::transaction(function () use($id) {
+            $post = PostMaster::where('pid', $id)->get();
+            /**
+             * To Do
+             * Add check to see if user is super admin. or maybe make different controller for him?
+             */
+            error_log("count is: ".count($post));
+            if(count($post) < 1 ) {
+                return redirect('home')->with('error', 'Post does not exist.');
+            }
+            if ($post[0]->author != Auth::user()->id) {
+                return redirect('home')->with('error', 'You are not authorized!');
+            }
+            PostDetails::where('pid', $id)->delete();
+            error_log("POST DELETED");
+            return redirect('home')->with('success', 'Post Deleted');
+        });
     }
 }

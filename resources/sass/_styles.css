@@ -1,7 +1,83 @@
+body {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 200;
+    margin: 0;
+    
+}
+
+body {
+    height: 100%;
+}
+
+.full-height {
+    height: 100vh;
+}
+
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+.flex-center {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.position-ref {
+    position: relative;
+}
+
+.top-right {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+}
+
+.content {
+    text-align: center;
+}
+
+/* navbar */
+.navbar-custom {
+    background-color: #2e547a !important;
+    border-color: #E7E7E7;
+}
+/* Navbar Title */
+.navbar .navbar-dark .navbar-brand {
+    color: #e3e3e3;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgb(236, 236, 236);
+    font-weight: 700;
+}
+
+.title {
+    font-size: 84px;
+}
+
+.links > a {
+    color: #d3d3d3;
+    padding: 0 25px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.m-b-md {
+    margin-bottom: 30px;
+}
+
 .avatar {
+    height: 70px;
     width:80px;
     margin: 10px;
-    border:3px solid rgb(179, 179, 179);
+    border:3px double rgb(179, 179, 179);
     border-radius: 500px;
     -webkit-border-radius: 500px;
     -moz-border-radius: 500px;
@@ -13,9 +89,52 @@ body {
 
 .foregrnd {
     background-color: #fcfcfc;
+    box-shadow: 0 0px 1px 0px rgba(0, 0, 0, 0.2), 0 6px 5px 0 rgba(0, 0, 0, 0.19);
+    
 }
 
 .profile {
     margin-right: -20px;
     height: 20em;
+ }
+
+.welcometxt {
+      background-color: #2e547a;
+      color: #e3e3e3;
+  }
+
+  .profile_sep {
+    width: 80%;
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  }
+
+  .profile_desc {
+      font-size: 1.05em;
+  }
+  
+  .post_card {
+    box-shadow: 0 0px 1px 0px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .postcontent{
+    font-family: 'PT Serif', serif !important;
+    /* font-size: 4vw; */
+  }
+
+  .settings {
+      cursor: pointer;
+  }
+
+  @media only screen and (min-width: 800px) {
+      .settings {
+        font-size: calc(8px + 0.5vw);
+      }
+  }
+  
+  @media only screen and (max-width: 799px) {
+      .settings {
+        font-size: calc(10px + 1vw);
+      }
   }

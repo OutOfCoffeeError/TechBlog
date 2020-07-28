@@ -7,6 +7,7 @@ use App\PostMaster;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use PostDetail;
 
 class HomeController extends Controller
@@ -28,8 +29,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = DB::select('select a.* from post_detail a, post_master b where a.pid = b.pid and b.author = ? ', [Auth::user()->id]);
+        $posts = DB::select(config('query.posts_by_user'), [Auth::user()->id]);
         // return $posts;
+        // error_log('Some message here.');
         return view('home')->with('posts', $posts);
     }
 }
