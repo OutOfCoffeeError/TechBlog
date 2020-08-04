@@ -35,7 +35,7 @@
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="{{ url('/post/create') }}" class="mr-5"><i class="fa fa-pencil-square-o mt-1" style="font-size: 30px;"></i></a>
+                    <a href="{{ url('/post/create') }}" title="Create a new post" class="mr-5"><i class="fa fa-pencil-square-o mt-1" style="font-size: 30px;"></i></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

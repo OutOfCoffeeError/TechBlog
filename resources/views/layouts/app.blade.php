@@ -23,8 +23,8 @@
 </head>
 
 <body>
+    @include('inc.navbar')
     <div id="app">
-        @include('inc.navbar')
 
         <main class="">
             @include('inc.messages')
@@ -32,6 +32,7 @@
         </main>
     </div>
 </body>
+@include('inc.footer')
 <script>
     // if(CKEDITOR.instances['element'])
     //       delete CKEDITOR.instances['element'];

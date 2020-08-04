@@ -24,7 +24,11 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    { }
+    {
+        //  $post = PostDetail::all();
+        //  return view('welcome')->with('posts', $post);
+
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -119,7 +123,42 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'subject' => 'required',
+            'title' => 'required',
+            'ckcontentbody' => 'required',
+            'tags' => 'required'
+        ]);
+
+        return PostMaster::find($id);
+        // Initiate a database transaction
+        DB::transaction(function ()  use ($request) {
+            $postMaster = new PostMaster();
+            $postDetail = new PostDetails();
+            $postId = null;
+            // Create an unique post id after checking it against database post entries
+            while (true) {
+                $postId = CommonHelper::generateB64Token(config('constants.post_id_length'));
+                if (PostMaster::where('pid', '=', $postId)->count() == 0) {
+                    break;
+                }
+            }
+            //Save post data to post detail table
+            $postDetail->pid = $postId;
+            $postDetail->title = $request->input('title');
+            $postDetail->content = $request->input('ckcontentbody');
+            $postDetail->tags = $request->input('tags');
+            $postDetail->subject = $request->input('subject');
+            $postDetail->save();
+
+            //Save post data to post master table
+            $postMaster->pid = $postId;
+            $postMaster->author = Auth::user()->id;
+            $postMaster->visible = config('constants.is_visible.hidden');
+            $postMaster->deleted = config('constants.is_deleted.not_deleted');
+            $postMaster->save();
+        });
+        return redirect('home')->with('success', 'New Post Published. Wait for the approval');
     }
 
     /**

@@ -6,7 +6,7 @@
         <div class="row">
             <div class="post-form col-md-12 col-xs-12">
                 <h4> Editing your post: </h4>
-                <form method="POST" action="{{route('post.store')}}">
+                <form method="POST" action="{{route('post.update', $post->pid)}}">
                     <div class="form-group">
                         <label for="title">Subject:</label>
                     <input type="text" class="form-control" name="subject" placeholder="Java, WebAssembly etc." value="{{$post->subject}}" />
@@ -25,6 +25,7 @@
                         <input type="text" class="form-control" name="tags" value="{{$post->tags}}" placeholder="eg. Java, Cloud, Blockchain">
                     </div>
                     <input type="submit" value="Submit" class="btn btn-primary">
+                    <input type="hidden" value="PUT" name="_method">
                 </form>
             </div>
         </div>
