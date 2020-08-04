@@ -26,7 +26,7 @@
                         <div class="overlay">
                             <div class="overlay-content container">
                                 <div class="row">
-                                    <div class="overlay-text">
+                                    <div class="overlay-text container-fluid">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <h1 class="overlay-txt-1"> Oh, Hey You! </h1>
@@ -69,10 +69,15 @@
                         <img class="card-img-top" src="/img/featured2.jpg" alt="Card image" style="width:100%">
                         <div class="card-body d-flex flex-column ">
                             <h4 class="card-title">{{$post->title}}</h4>
-                            <p class="card-text">Some example text some example text. John Doe is an architect and
-                                engineer
+                            <p class="card-text mt-auto">
+                                <span class="mt-auto"><small><time>{{$post->created_at}}</time></small></span>
+                                <span class="separator">•</span>
+                                <span><small>{{$post->author}}</small></span>
+                                <span class="separator">•</span>
+                                <span><small>{{$post->read_time}} min</small></span>
                             </p>
-                            <a href="#" class="btn btn-primary mt-auto">Learn More  <i class="fa fa-chevron-circle-right"></i></a>
+                            <a href="#" class="btn btn-primary">Learn More <i
+                                    class="fa fa-chevron-circle-right"></i></a>
                         </div>
                     </div>
                 </div>

@@ -2,10 +2,11 @@
 
 @section('content')
 <div class="container">
-    <div>
+    <div class="mt-4">
         <div class="row">
             <div class="post-form col-md-12 col-xs-12">
                 <h4> Create new post </h4>
+                <hr>
                 <form method="POST" action="{{route('post.store')}}">
                     <div class="form-group">
                         <label for="title">Subject:</label>

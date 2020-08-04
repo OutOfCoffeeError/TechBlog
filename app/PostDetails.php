@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class PostDetails extends Model
 {
     protected $table = 'post_detail';
+    protected $primaryKey = 'pid';
+    public $incrementing = false;
 }

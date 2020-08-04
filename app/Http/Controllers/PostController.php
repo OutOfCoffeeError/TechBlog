@@ -13,9 +13,12 @@ use PostDetail;
 class PostController extends Controller
 {
 
-    public function __construct()
+    public function __construct(PostDetails $postDetails, PostMaster $postMaster)
     {
         $this->middleware('auth');
+
+        $this->postDetails = $postDetails;
+        $this->postMaster = $postMaster;
     }
 
     /**
@@ -58,8 +61,8 @@ class PostController extends Controller
 
         // Initiate a database transaction
         DB::transaction(function ()  use ($request) {
-            $postMaster = new PostMaster();
-            $postDetail = new PostDetails();
+            // $postMaster = new PostMaster();
+            // $postDetail = new PostDetails();
             $postId = null;
             // Create an unique post id after checking it against database post entries
             while (true) {
@@ -68,22 +71,32 @@ class PostController extends Controller
                     break;
                 }
             }
+
             //Save post data to post detail table
-            $postDetail->pid = $postId;
-            $postDetail->title = $request->input('title');
-            $postDetail->content = $request->input('ckcontentbody');
-            $postDetail->tags = $request->input('tags');
-            $postDetail->subject = $request->input('subject');
-            $postDetail->save();
+            $postContents = $request->input('ckcontentbody');
+            $readTime = $this->getReadTime($postContents);
+            $this->postDetails->pid = $postId;
+            $this->postDetails->title = $request->input('title');
+            $this->postDetails->content = $postContents;
+            $this->postDetails->tags = $request->input('tags');
+            $this->postDetails->subject = $request->input('subject');
+            $this->postDetails->read_time = $readTime;
+            $this->postDetails->save();
 
             //Save post data to post master table
-            $postMaster->pid = $postId;
-            $postMaster->author = Auth::user()->id;
-            $postMaster->visible = config('constants.is_visible.hidden');
-            $postMaster->deleted = config('constants.is_deleted.not_deleted');
-            $postMaster->save();
+            $this->postMaster->pid = $postId;
+            $this->postMaster->author = Auth::user()->id;
+            $this->postMaster->visible = config('constants.is_visible.visible');
+            $this->postMaster->deleted = config('constants.is_deleted.not_deleted');
+            $this->postMaster->is_approved = config('constants.is_approved.no');
+            $this->postMaster->save();
         });
         return redirect('home')->with('success', 'New Post Published. Wait for the approval');
+    }
+
+    private function getReadTime(String $content)
+    {
+        return strlen(strip_tags($content)) / config('constants.read_time');
     }
 
     /**
@@ -107,11 +120,8 @@ class PostController extends Controller
      */
     public function edit($pid)
     {
-        $post = PostDetails::where('pid', $pid)->get();
-        if (count($post) < 1) {
-            return redirect('home');
-        }
-        return view('pages.postedit')->with('post', $post[0]);
+        $post = PostDetails::find($pid);
+        return view('pages.postedit')->with('post', $post);
     }
 
     /**
@@ -130,35 +140,30 @@ class PostController extends Controller
             'tags' => 'required'
         ]);
 
-        return PostMaster::find($id);
         // Initiate a database transaction
-        DB::transaction(function ()  use ($request) {
-            $postMaster = new PostMaster();
-            $postDetail = new PostDetails();
-            $postId = null;
-            // Create an unique post id after checking it against database post entries
-            while (true) {
-                $postId = CommonHelper::generateB64Token(config('constants.post_id_length'));
-                if (PostMaster::where('pid', '=', $postId)->count() == 0) {
-                    break;
-                }
-            }
+        DB::transaction(function ()  use ($request, $id) {
+            error_log('ID '.$id);
+            $postMaster = PostMaster::find($id);
+            $postDetails = PostDetails::find($id);
+            // $postMaster = PostMaster::where('pid', '=', $id)->first();
+            // $postDetails = PostDetails::where('pid', '=', $id)->first();
             //Save post data to post detail table
-            $postDetail->pid = $postId;
-            $postDetail->title = $request->input('title');
-            $postDetail->content = $request->input('ckcontentbody');
-            $postDetail->tags = $request->input('tags');
-            $postDetail->subject = $request->input('subject');
-            $postDetail->save();
+            $postContents = $request->input('ckcontentbody');
+            $readTime = $this->getReadTime($postContents);
+            $postDetails->title = $request->input('title');
+            $postDetails->content = $postContents;
+            $postDetails->tags = $request->input('tags');
+            $postDetails->subject = $request->input('subject');
+            $postDetails->read_time = $readTime;
+            $postDetails->save();
 
             //Save post data to post master table
-            $postMaster->pid = $postId;
-            $postMaster->author = Auth::user()->id;
-            $postMaster->visible = config('constants.is_visible.hidden');
+            $postMaster->visible = config('constants.is_visible.visible');
             $postMaster->deleted = config('constants.is_deleted.not_deleted');
+            $postMaster->is_approved = config('constants.is_approved.no');
             $postMaster->save();
         });
-        return redirect('home')->with('success', 'New Post Published. Wait for the approval');
+        return redirect('home')->with('success', 'Post Published. Wait for the approval');
     }
 
     /**
@@ -169,14 +174,14 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        return DB::transaction(function () use($id) {
+        return DB::transaction(function () use ($id) {
             $post = PostMaster::where('pid', $id)->get();
             /**
              * To Do
              * Add check to see if user is super admin. or maybe make different controller for him?
              */
-            error_log("count is: ".count($post));
-            if(count($post) < 1 ) {
+            error_log("count is: " . count($post));
+            if (count($post) < 1) {
                 return redirect('home')->with('error', 'Post does not exist.');
             }
             if ($post[0]->author != Auth::user()->id) {

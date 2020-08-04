@@ -9,7 +9,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/post/{{$post->pid}}/edit"><i class="fa fa-cog" style="color: steelblue"></i> Edit</a>
                 {{-- <div class="dropdown-divider"></div> --}}
-                <a class="dropdown-item" href="#"><i class="fa fa-eye-slash"></i> Hide</a>
+                <a class="dropdown-item" href="#"><i class="fa fa-eye-slash"></i> Hide/Unhide</a>
                 <a class="dropdown-item" href="/"><i class="fa fa-trash" style="color: red"></i> Delete</a>
             </div>
         </div>

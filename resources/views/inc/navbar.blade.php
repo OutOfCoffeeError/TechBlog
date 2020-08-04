@@ -3,15 +3,33 @@
         <a class="navbar-brand" href="{{ url('/') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+
+        <div class="d-flex flex-row order-2 order-lg-3">
+            @auth
+            @if (Route::getCurrentRoute()->uri() =='home')
+            <ul class="navbar-nav flex-row">
+                <li class="nav-item">
+                    <div class="container" id="sidenav-btn">
+                        <span style="font-size:30px; cursor:pointer" onclick="openNav()" title="Your Profile"><i
+                                class="fa fa-user-circle" style="color: white; font-size:25px;"></i></span>
+                    </div>
+                </li>
+            </ul>
+            @endif
+            @endauth
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+
+
+        <div class="collapse navbar-collapse order-3 order-lg-2" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
-
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -29,13 +47,15 @@
                 </li>
                 @endif
                 @else
-                @if (Route::currentRouteAction()=='')
+                @if (Route::getCurrentRoute()->uri() !='home')
                 <li class="nav-item">
-                    <a href="{{ url('/home') }}" class="mr-5"><i class="fa fa-home" style="font-size: 35px;"></i></a>
+                    <a href="{{ url('/home') }}" class="mr-5"><i class="fa fa-home mt-1"
+                            style="font-size: 30px;"></i></a>
                 </li>
                 @endif
                 <li class="nav-item">
-                    <a href="{{ url('/post/create') }}" title="Create a new post" class="mr-5"><i class="fa fa-pencil-square-o mt-1" style="font-size: 30px;"></i></a>
+                    <a href="{{ url('/post/create') }}" title="Create a new post" class="mr-5"><i
+                            class="fa fa-pencil-square-o mt-2" style="font-size: 25px;"></i></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
