@@ -2,19 +2,29 @@
 
 @section('content')
 
+@include('inc.popup', ['data' => ['header' => 'Delete Post', 'text' => 'Are you sure you want to delete the post?',
+'formmethod'=> 'DELETE',
+'type' => 1, 'button'=>['route'=>'post.destroy', 'text'=>'Yes', 'req' => $post->pid]]])
 <div class="container-fluid mb-4 postcontent">
     @auth
     @if (Auth::user()->id == $post->author)
     <div class="row">
         <div class="col-md-12">
-            <span class="float-right mt-2 settings dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-gears"></i>
-                Settings </span>
+            <span class="float-right mt-2 settings dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-gears"></i>Settings </span>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/post/{{$post->pid}}/edit"><i class="fa fa-cog"
                         style="color: steelblue"></i> Edit</a>
                 {{-- <div class="dropdown-divider"></div> --}}
-                <a class="dropdown-item" href="#"><i class="fa fa-eye-slash"></i> Hide/Unhide</a>
-                <a class="dropdown-item" href="/"><i class="fa fa-trash" style="color: red"></i> Delete</a>
+                <a class="dropdown-item" href="/togglevisible/{{$post->pid}}/{{$post->author}}"><i class="fa fa-eye-slash"></i>
+                    
+                    @if ($post->visible == config('constants.is_visible.visible'))
+                        Hide
+                    @else
+                        Unhide
+                    @endif 
+                </a>
+                <a class="dropdown-item" href="/" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"
+                        style="color: red"></i> Delete</a>
             </div>
         </div>
     </div>

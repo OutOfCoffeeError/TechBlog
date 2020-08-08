@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Helpers\CommonHelper;
 use App\PostDetails;
 use App\PostMaster;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PostDetail;
 
 class PostController extends Controller
@@ -108,7 +110,10 @@ class PostController extends Controller
     public function show($pid)
     {
         $post = DB::select(config('query.get_author_post'), [$pid]);
-        if(Auth::user()->id != $post[0]->author) {
+        if (count($post) == 0) {
+            return redirect('home')->with('error', 'Invalid Post');
+        }
+        if (Auth::user()->id != $post[0]->author) {
             return redirect('home')->with('error', 'Invalid user');
         }
         // return $post;
@@ -145,7 +150,7 @@ class PostController extends Controller
 
         // Initiate a database transaction
         DB::transaction(function ()  use ($request, $id) {
-            error_log('ID '.$id);
+            error_log('ID ' . $id);
             $postMaster = PostMaster::find($id);
             $postDetails = PostDetails::find($id);
             // $postMaster = PostMaster::where('pid', '=', $id)->first();
@@ -193,6 +198,26 @@ class PostController extends Controller
             PostDetails::where('pid', $id)->delete();
             error_log("POST DELETED");
             return redirect('home')->with('success', 'Post Deleted');
+        });
+    }
+
+    public function toggleVisibility($pid, $author)
+    {
+        if (Auth::user()->id != $author) {
+            return redirect('home')->with('error', 'Invalid User');
+        }
+        return DB::transaction(function () use ($pid) {
+            try {
+                DB::update(config('query.hide_post'), ['PID' => $pid]);
+                $post = DB::select(config('query.get_author_post'), [$pid]);
+                if (count($post) == 0) {
+                    return redirect('home')->with('error', 'Invalid Post');
+                }
+                return redirect()->back()->with('post', $post[0]);
+            } catch (Exception $e) {
+                Log::error('PostController->'. $e);
+                return redirect('home')->with('error', 'Something went wrong');
+            }
         });
     }
 }

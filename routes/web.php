@@ -40,3 +40,5 @@ Route::get('/tokencallback', function(Request $request) {
 Route::get('/getcache', function () {
     return Cache::get('cachekey', 'default');
 });
+
+Route::get('/togglevisible/{pid}/{auth}', 'PostController@toggleVisibility');

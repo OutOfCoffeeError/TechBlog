@@ -58,6 +58,12 @@
                     <a href="{{ url('/post/create') }}" title="Create a new post" class="mr-5"><i
                             class="fa fa-pencil-square-o mt-2" style="font-size: 25px; color:white"></i></a>
                 </li>
+                @if (Auth::user()->role == 1 || Auth::user()->role == 2)
+                <li class="nav-item">
+                    <a href="{{ url('/post/manage') }}" title="Manage" class="mr-5"><i
+                            class="fa fa-desktop mt-2" style="font-size: 25px; color:white"></i></a>
+                </li>
+                @endif
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

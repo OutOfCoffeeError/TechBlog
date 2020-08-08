@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div>
+    <div class="mt-4">
         <div class="row">
             <div class="post-form col-md-12 col-xs-12">
                 <h4> Editing your post: </h4>
