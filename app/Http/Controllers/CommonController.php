@@ -21,4 +21,10 @@ class CommonController extends Controller
         // error_log('Some message here.');
         return view('welcome')->with('posts', $posts);
     }
+
+    public function getPost($pid) {
+        $post = DB::select(config('query.getpost'), [$pid, 1, 1, 0]);
+        // return $post;
+        return view('pages.postview')->with('post', $post[0]);
+    }
 }

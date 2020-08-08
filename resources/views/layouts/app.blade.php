@@ -26,7 +26,7 @@
 
 <body>
     @include('inc.navbar')
-    <div id="app">
+    <div id="app" class="mb-5">
 
         <main class="">
             @include('inc.messages')

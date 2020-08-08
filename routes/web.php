@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Cache;
 */
 
 Route::get('/', 'CommonController@index');
+Route::get('/view/{id}', 'CommonController@getPost');
 
 Route::get('/test/{id}', function ($id) {
     return 'Token is: '.CommonHelper::generateB64Token($id);

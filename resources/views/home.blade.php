@@ -184,7 +184,7 @@
                                 <div class="col-md-6">
                                     <h5 class="card-title"><a href="/post/{{$post->pid}}">{{$post->title}}</a></h5>
                                     {{-- <p class="card-text">{{!! $post->shortdesc !!}}</p> --}}
-                                    <span class="topic">{{$post->subject}}</span>&nbsp;
+                                    <span class="topic"><b>{{$post->subject}}</b></span>&nbsp;
                                     <span class="separator">⁍</span>
                                     <span><small><em>{{$post->created_at}}</em></small></span>
                                 </div>

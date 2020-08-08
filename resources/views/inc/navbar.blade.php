@@ -18,6 +18,7 @@
                 </li>
             </ul>
             @endif
+            
             @endauth
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -50,12 +51,12 @@
                 @if (Route::getCurrentRoute()->uri() !='home')
                 <li class="nav-item">
                     <a href="{{ url('/home') }}" class="mr-5"><i class="fa fa-home mt-1"
-                            style="font-size: 30px;"></i></a>
+                            style="font-size: 30px; color:white"></i></a>
                 </li>
                 @endif
                 <li class="nav-item">
                     <a href="{{ url('/post/create') }}" title="Create a new post" class="mr-5"><i
-                            class="fa fa-pencil-square-o mt-2" style="font-size: 25px;"></i></a>
+                            class="fa fa-pencil-square-o mt-2" style="font-size: 25px; color:white"></i></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

@@ -107,7 +107,10 @@ class PostController extends Controller
      */
     public function show($pid)
     {
-        $post = DB::select(config('query.getpost'), [$pid, Auth::user()->id]);
+        $post = DB::select(config('query.get_author_post'), [$pid]);
+        if(Auth::user()->id != $post[0]->author) {
+            return redirect('home')->with('error', 'Invalid user');
+        }
         // return $post;
         return view('pages.postview')->with('post', $post[0]);
     }

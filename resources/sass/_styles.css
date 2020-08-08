@@ -156,7 +156,7 @@ body {
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
     .settings {
-        font-size: calc(8px + 0.5vw);
+        font-size: calc(10px + 1vw);
       }
       .overlay-content {
           text-align: center;
@@ -186,7 +186,7 @@ body {
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
     .settings {
-        font-size: calc(10px + 1vw);
+        font-size: calc(10px + 0.8vw);
       }
       .overlay-content {
           text-align: center;
@@ -216,6 +216,9 @@ body {
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
+    .settings {
+        font-size: calc(10px + 0.5vw);
+    }
     .overlay-text {
         text-align: justify;
         margin-top: 15%;

@@ -32,14 +32,10 @@
                                                 <h1 class="overlay-txt-1"> Oh, Hey You! </h1>
                                             </div>
                                         </div>
-                                        {{-- <div class="row">
-                                            <div class="col-md-12">
-                                                <p style="font-size: 2vw; float: left">Welcome to the blog</p>
-                                            </div>
-                                        </div> --}}
+    
                                         <div class="row">
                                             <div class="col-md-12 col-sm-12 col-xs-8 overlay-txt-2">
-                                                <p style="">Welcome to the blog. I see you have some skills you want to
+                                                <p style="">Welcome to the blahblahblog. I see you have some skills you want to
                                                     exhibit, Why not share it with everyone?</p>
                                             </div>
                                         </div>
@@ -76,7 +72,7 @@
                                 <span class="separator">•</span>
                                 <span><small>{{$post->read_time}} min</small></span>
                             </p>
-                            <a href="#" class="btn btn-primary">Learn More <i
+                            <a href="/view/{{$post->pid}}" class="btn btn-primary stretched-link">Learn More <i
                                     class="fa fa-chevron-circle-right"></i></a>
                         </div>
                     </div>
