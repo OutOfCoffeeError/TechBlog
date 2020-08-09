@@ -1,5 +1,6 @@
 <?php 
 namespace App\Helpers;
+use Illuminate\Support\Facades\Auth;
 
 class CommonHelper {
     /**
@@ -31,5 +32,27 @@ class CommonHelper {
     
         return $token;
     }
+
+    /**
+     * Check if the user is admin/superUser
+     * @return Boolean
+     */
+
+     public static function checkAdmin() {
+         if(Auth::user()->role == config('constants.user_roles.superUser')
+         || Auth::user()->role == config('constants.user_roles.admin')) {
+             return true;
+         }
+         return false;
+     }
+
+     
+     public static function checkSU() {
+        if(Auth::user()->role == config('constants.user_roles.superUser')) {
+            return true;
+        }
+        return false;
+    }
+     
 }
 ?>

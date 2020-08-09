@@ -1,5 +1,5 @@
-html {
-    /* min-height: 100%; */
+#app {
+    min-height: 50vh;
 }
 
 body {
@@ -67,6 +67,16 @@ body {
     /* background: linear-gradient(294deg, rgb(38 159 64) 4%, rgb(13 112 54) 79%, rgb(22 106 43) 100%); */
     width: 21%;
     height: 45px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
 }
 
 @media only screen and (max-width: 370px) {
@@ -366,6 +376,37 @@ img {
   .featured-cards {
     box-shadow: 7px 7px 10px -12px black;
   }
+
+  /* PROFILE SIDE BAR */
+  .sidenav {
+    width: 0;
+    position: fixed;
+    z-index: 2;
+    top: 0px;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    float: right;
+    margin-right: 10px;
+    font-size: 25px;
+}
 
 .profile_sidnav {
     width: 100%;

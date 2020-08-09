@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\PostDetails;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class CommonController extends Controller
@@ -22,9 +23,18 @@ class CommonController extends Controller
         return view('welcome')->with('posts', $posts);
     }
 
-    public function getPost($pid) {
-        $post = DB::select(config('query.getpost'), [$pid, 1, 1, 0]);
-        // return $post;
-        return view('pages.postview')->with('post', $post[0]);
+    public function getPost($pid)
+    {
+        try {
+            $post = DB::select(config('query.getpost'), ['PID' => $pid, 'APPRV' => 1, 'DEL' => 0]);
+            if (count($post) == 0) {
+                return redirect()->back()->with('error', 'Invaid post');
+             }
+            // return $post;
+            return view('pages.postview')->with('post', $post[0]);
+        } catch (Exception $e) {
+            Log::error('CommonController->' . $e);
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 }

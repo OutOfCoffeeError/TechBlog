@@ -60,7 +60,7 @@
                 </li>
                 @if (Auth::user()->role == 1 || Auth::user()->role == 2)
                 <li class="nav-item">
-                    <a href="{{ url('/post/manage') }}" title="Manage" class="mr-5"><i
+                    <a href="{{ route('admin.index') }}" title="Manage" class="mr-5"><i
                             class="fa fa-desktop mt-2" style="font-size: 25px; color:white"></i></a>
                 </li>
                 @endif

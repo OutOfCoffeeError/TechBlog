@@ -2,81 +2,12 @@
 
 @section('content')
 
-<head>
-    <style>
-        body {
-            font-family: "Lato", sans-serif;
-            transition: background-color .5s;
-        }
-
-        .sidenav {
-            /* height: 100%; */
-            width: 0;
-            position: fixed;
-            z-index: 2;
-            top: 0px;
-            left: 0;
-            /* background-color: #111; */
-            overflow-x: hidden;
-            transition: 0.5s;
-            padding-top: 60px;
-        }
-
-        .sidenav a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #818181;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidenav a:hover {
-            color: #f1f1f1;
-        }
-
-        .sidenav .closebtn {
-            float: right;
-            margin-right: 10px;
-            font-size: 25px;
-        }
-
-        #main {
-            transition: margin-left .5s;
-            padding: 16px;
-        }
-
-        @media screen and (max-height: 450px) {
-            .sidenav {
-                padding-top: 15px;
-            }
-
-            .sidenav a {
-                font-size: 18px;
-            }
-        }
-    </style>
-</head>
-<script>
-    function openNav() {
-      document.getElementById("mySidenav").style.width = "320px";
-      document.getElementById("overlay-home").style.display = "block";
-      
-      document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
-    }
-    
-    function closeNav() {
-      document.getElementById("mySidenav").style.width = "0";
-      document.getElementById("overlay-home").style.display= "none";
-      document.body.style.backgroundColor = "white";
-    }
-</script>
-
 <div id="mySidenav" class="sidenav">
     <div class="profile foregrnd profile_sidnav">
         <div class="row">
             <div class="col-md-12">
-                <span style="cursor: pointer" class="closebtn" onclick="closeNav()"><i class="fa fa-times-circle"></i></span>
+                <span style="cursor: pointer" class="closebtn" onclick="closeNav()"><i
+                        class="fa fa-times-circle"></i></span>
             </div>
 
         </div>
@@ -97,7 +28,7 @@
         <div class="row">
             <div class="col-md-12 profile_desc">
                 <div class="col-md-12 text-center" style="line-height: 80%;">
-                    <span><small>Software Engg. at Google</small></span>
+                    <span><small>About User</small></span>
                 </div>
                 <div class="col-md-12 text-center mt-2" style="line-height: 80%;">
                     <span><small>{{ Auth::user()->created_at->format('d M, Y') }}</small></span>
@@ -141,7 +72,7 @@
                 <div class="row">
                     <div class="col-md-12 profile_desc">
                         <div class="col-md-12 text-center" style="line-height: 80%;">
-                            <span><small>Software Engg. at Google</small></span>
+                            <span><small>About User</small></span>
                         </div>
                         <div class="col-md-12 text-center mt-2" style="line-height: 80%;">
                             <span><small>{{ Auth::user()->created_at->format('d M, Y') }}</small></span>
@@ -182,11 +113,26 @@
                                             src="https://i.imgur.com/9wnioj4.jpg"></a>
                                 </div>
                                 <div class="col-md-6">
-                                    <h5 class="card-title"><a href="/post/{{$post->pid}}">{{$post->title}}</a></h5>
+                                    <h5 class="card-title"><a href="/post/{{$post->pid}}"
+                                            >{{$post->title}}</a></h5>
                                     {{-- <p class="card-text">{{!! $post->shortdesc !!}}</p> --}}
                                     <span class="topic"><b>{{$post->subject}}</b></span>&nbsp;
                                     <span class="separator">⁍</span>
-                                    <span><small><em>{{$post->created_at}}</em></small></span>
+                                    <span><small>{{$post->created_at}}</small></span>
+                                    <h5 class="mt-2">
+                                        @if ($post->visible == config('constants.is_visible.hidden'))
+                                        <span title="hidden"><i class="fa fa-eye-slash"></i></span>
+                                        @else
+                                        <span title="public"><i class="fa fa-eye"></i></span>
+                                        @endif
+                                    </h5>
+                                    <h5>
+                                        @if ($post->approved == config('constants.is_approved.yes'))
+                                        <span class="badge badge-primary">Approved</span>
+                                        @else
+                                        <span class="badge badge-danger">Waiting For Approval</span>
+                                        @endif 
+                                    </h5>
                                 </div>
                             </div>
                         </div>

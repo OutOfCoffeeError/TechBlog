@@ -30,6 +30,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('post', 'PostController');
 
+// Route::resource('admin', 'AdminController');
+
+Route::get('/admin', 'AdminController@index')->name('admin.index');
+
+Route::post('/admin/approve', 'AdminController@approve')->name('admin.approve');
+Route::post('/admin/reject', 'AdminController@reject')->name('admin.reject');
+
 Route::get('/tokencallback', function(Request $request) {
     Cache::put('cachekey', "CACHE VALUE");
 

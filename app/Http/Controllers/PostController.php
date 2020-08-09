@@ -113,8 +113,10 @@ class PostController extends Controller
         if (count($post) == 0) {
             return redirect('home')->with('error', 'Invalid Post');
         }
-        if (Auth::user()->id != $post[0]->author) {
-            return redirect('home')->with('error', 'Invalid user');
+        if (Auth::user()->id != $post[0]->author 
+            && ( Auth::user()->role != config('constants.user_roles.superUser') 
+            && Auth::user()->role != config('constants.user_roles.admin'))) {
+            return redirect()->back()->with('error', 'Invalid user');
         }
         // return $post;
         return view('pages.postview')->with('post', $post[0]);
@@ -166,8 +168,8 @@ class PostController extends Controller
             $postDetails->save();
 
             //Save post data to post master table
-            $postMaster->visible = config('constants.is_visible.visible');
-            $postMaster->deleted = config('constants.is_deleted.not_deleted');
+            // $postMaster->visible = config('constants.is_visible.visible');
+            // $postMaster->deleted = config('constants.is_deleted.not_deleted');
             $postMaster->is_approved = config('constants.is_approved.no');
             $postMaster->save();
         });
@@ -215,7 +217,7 @@ class PostController extends Controller
                 }
                 return redirect()->back()->with('post', $post[0]);
             } catch (Exception $e) {
-                Log::error('PostController->'. $e);
+                Log::error('PostController->' . $e);
                 return redirect('home')->with('error', 'Something went wrong');
             }
         });
