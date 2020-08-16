@@ -44,7 +44,7 @@
 
 <div class="container-fluid mb-4 postcontent">
     @auth
-    @if (Auth::user()->id == $post->author || Auth::user()->role == config('constants.user_roles.super_user'))
+    @if (Auth::user()->id == $post->author || Auth::user()->role == config('constants.user_roles.superUser'))
     <div class="row">
         <div class="col-md-12">
             <span class="float-right mt-2 settings dropdown-toggle" data-toggle="dropdown"> <i
@@ -70,7 +70,7 @@
     @endif
     @endauth
     <div class="row">
-        {{Auth::user()->role == config('constants.user_roles.super_user')}}
+        {{Auth::user()->role == config('constants.user_roles.superUser')}}
         <div class="col-md-12 mt-4">
             @if ((Auth::user()->role == config('constants.user_roles.superUser')
             || Auth::user()->role == config('constants.user_roles.admin'))

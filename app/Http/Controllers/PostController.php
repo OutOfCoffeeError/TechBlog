@@ -93,7 +93,7 @@ class PostController extends Controller
             $this->postMaster->is_approved = config('constants.is_approved.no');
             $this->postMaster->save();
         });
-        return redirect('home')->with('success', 'New Post Published. Wait for the approval');
+        return redirect('home')->with('success', 'New Post Published. Wait For The Approval');
     }
 
     private function getReadTime(String $content)
@@ -111,7 +111,7 @@ class PostController extends Controller
     {
         $post = DB::select(config('query.get_author_post'), [$pid]);
         if (count($post) == 0) {
-            return redirect('home')->with('error', 'Invalid Post');
+            return redirect()->back()->with('error', 'Invalid Post');
         }
         if (Auth::user()->id != $post[0]->author 
             && ( Auth::user()->role != config('constants.user_roles.superUser') 
@@ -173,7 +173,7 @@ class PostController extends Controller
             $postMaster->is_approved = config('constants.is_approved.no');
             $postMaster->save();
         });
-        return redirect('home')->with('success', 'Post Published. Wait for the approval');
+        return redirect('home')->with('success', 'Post Updated. Wait For The Approval');
     }
 
     /**
@@ -192,33 +192,34 @@ class PostController extends Controller
              */
             error_log("count is: " . count($post));
             if (count($post) < 1) {
-                return redirect('home')->with('error', 'Post does not exist.');
+                return redirect()->back()->with('error', 'Post does not exist.');
             }
-            if ($post[0]->author != Auth::user()->id) {
-                return redirect('home')->with('error', 'You are not authorized!');
+            if ($post[0]->author != Auth::user()->id
+                &&  Auth::user()->role != config('constants.user_roles.superUser')) {
+                return redirect()->back()->with('error', 'You are not authorized!');
             }
-            PostDetails::where('pid', $id)->delete();
+            PostMaster::where('pid', $id)->update(['deleted' => config('constants.is_deleted.deleted')]);
             error_log("POST DELETED");
-            return redirect('home')->with('success', 'Post Deleted');
+            return redirect()->back()->with('success', 'Post Deleted');
         });
     }
 
     public function toggleVisibility($pid, $author)
     {
         if (Auth::user()->id != $author) {
-            return redirect('home')->with('error', 'Invalid User');
+            return redirect()->back()->with('error', 'Invalid User');
         }
         return DB::transaction(function () use ($pid) {
             try {
                 DB::update(config('query.hide_post'), ['PID' => $pid]);
                 $post = DB::select(config('query.get_author_post'), [$pid]);
                 if (count($post) == 0) {
-                    return redirect('home')->with('error', 'Invalid Post');
+                    return redirect()->back()->with('error', 'Invalid Post');
                 }
                 return redirect()->back()->with('post', $post[0]);
             } catch (Exception $e) {
                 Log::error('PostController->' . $e);
-                return redirect('home')->with('error', 'Something went wrong');
+                return redirect()->back()->with('error', 'Something went wrong');
             }
         });
     }
