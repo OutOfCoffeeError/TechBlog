@@ -75,10 +75,9 @@ class AdminController extends Controller
         $pid = $request->input('pid');
         $remark = $request->input('remark');
         DB::transaction(function () use ($pid, $remark) {
-            $post = $this->postMaster::find($pid);
-            $post->is_approved = config('constants.is_approved.no');
+            $this->postMaster::where('pid', $pid)->update(['is_approved' =>  config('constants.is_approved.rejected')]);
             //Reject remark code
-            $post->save();
+            $this->postDetails::where('pid', $pid)->update(['remarks' => $remark]);
          });
         return redirect()->back();
     }

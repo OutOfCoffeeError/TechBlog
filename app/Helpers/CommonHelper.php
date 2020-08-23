@@ -1,6 +1,7 @@
 <?php 
 namespace App\Helpers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CommonHelper {
     /**
@@ -52,6 +53,29 @@ class CommonHelper {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check for XSS vulnerabilities
+     */
+    public static function checkXSS($content) {
+        $xssTag = '/<[ ]*script/';
+        if(preg_match($xssTag, $content)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Mail Utility
+     */
+    public static function sendMail() {
+        Mail::send('emails.test', [], function ($message) {
+            // $message->from('shubhampawarluk3@gmail.com', 'Shubham Pawar');
+            // $message->sender('john@johndoe.com', 'John Doe');
+            $message->to('shubhampawar16298@gmail.com', 'Shubham Pawar');
+            $message->subject('just another Subject');
+        });
     }
      
 }

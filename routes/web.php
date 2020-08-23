@@ -48,4 +48,9 @@ Route::get('/getcache', function () {
     return Cache::get('cachekey', 'default');
 });
 
+Route::get('/testmail', function () {
+    CommonHelper::sendMail();
+    return "Mail Sent";
+});
+
 Route::get('/togglevisible/{pid}/{auth}', 'PostController@toggleVisibility');

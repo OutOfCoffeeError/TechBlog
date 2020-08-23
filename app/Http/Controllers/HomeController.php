@@ -20,6 +20,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('checkXSS');
     }
 
     /**
@@ -29,7 +30,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = DB::select(config('query.posts_by_user'), [Auth::user()->id]);
+        $posts = DB::select(config('query.posts_by_user'), ['AUTHOR' => Auth::user()->id, 'DELETED' => config('constants.is_deleted.not_deleted')]);
         // return $posts;
         // error_log('Some message here.');
         return view('home')->with('posts', $posts);

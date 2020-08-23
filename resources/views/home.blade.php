@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 d-flex justify-content-center">
-                <img src="{{asset('img/profile.jpg')}}" class="rounded-circle avatar" alt="noimg" width="60"
+                <img src="{{asset('img/profile.png')}}" class="rounded-circle avatar" alt="noimg" width="60"
                     height="60">
             </div>
         </div>
@@ -57,7 +57,7 @@
             <div class="profile foregrnd">
                 <div class="row">
                     <div class="col-md-12 d-flex justify-content-center">
-                        <img src="{{asset('img/profile.jpg')}}" class="rounded-circle avatar" alt="noimg" width="60"
+                        <img src="{{asset('img/profile.png')}}" class="rounded-circle avatar" alt="noimg" width="60"
                             height="60">
                     </div>
                 </div>
@@ -121,17 +121,19 @@
                                     <span><small>{{$post->created_at}}</small></span>
                                     <h5 class="mt-2">
                                         @if ($post->visible == config('constants.is_visible.hidden'))
-                                        <span title="hidden"><i class="fa fa-eye-slash"></i></span>
+                                        <small><span title="hidden"><i class="fa fa-eye-slash"></i> Hidden</span></small>
                                         @else
-                                        <span title="public"><i class="fa fa-eye"></i></span>
+                                        <small><span title="public"><i class="fa fa-eye"></i> Public</span></small>
                                         @endif
                                     </h5>
                                     <h5>
                                         @if ($post->approved == config('constants.is_approved.yes'))
                                         <span class="badge badge-primary">Approved</span>
+                                        @elseif($post->approved == config('constants.is_approved.rejected'))
+                                        <span class="badge badge-danger">Rejected</span>
                                         @else
-                                        <span class="badge badge-danger">Waiting For Approval</span>
-                                        @endif 
+                                        <span class="badge badge-secondary">Waiting For Approval</span>
+                                        @endif
                                     </h5>
                                 </div>
                             </div>

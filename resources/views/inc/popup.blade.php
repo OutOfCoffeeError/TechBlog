@@ -18,6 +18,7 @@
                 @if ($data['type']== 1)
                 <form method="POST" action="{{route($data['button']['route'], $data['button']['req'])}}">
                     @csrf
+                    <input type="hidden" name="url" value="{{URL::previous()}}">
                     <input type="hidden" name="_method" value="{{$data['formmethod']}}">
                     <input type="submit" value="{{$data['button']['text']}}" class="btn btn-danger">
                     <button type="button" class="btn btn-light" data-dismiss="modal">No</button>

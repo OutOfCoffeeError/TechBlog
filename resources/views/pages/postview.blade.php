@@ -47,19 +47,18 @@
     @if (Auth::user()->id == $post->author || Auth::user()->role == config('constants.user_roles.superUser'))
     <div class="row">
         <div class="col-md-12">
-            <span class="float-right mt-2 settings dropdown-toggle" data-toggle="dropdown"> <i
-                    class="fa fa-gears"></i>Settings </span>
+            <span class="float-right mt-2 settings dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-gears"></i>
+                Settings </span>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="/post/{{$post->pid}}/edit"><i class="fa fa-cog"
                         style="color: steelblue"></i> Edit</a>
                 {{-- <div class="dropdown-divider"></div> --}}
-                <a class="dropdown-item" href="/togglevisible/{{$post->pid}}/{{$post->author}}"><i
-                        class="fa fa-eye-slash"></i>
+                <a class="dropdown-item" href="/togglevisible/{{$post->pid}}/{{$post->author}}">
 
                     @if ($post->visible == config('constants.is_visible.visible'))
-                    Hide
+                    <i class="fa fa-eye-slash"> </i> Hide
                     @else
-                    Unhide
+                    <i class="fa fa-eye"> </i> Unhide
                     @endif
                 </a>
                 <a class="dropdown-item" href="/" data-toggle="modal" data-target="#myModal"><i class="fa fa-trash"
@@ -67,40 +66,58 @@
             </div>
         </div>
     </div>
+    @if ($post->is_approved == config('constants.is_approved.rejected'))
+    <div class="row">
+        <div class="col-md-8 mx-auto col-sm-12 col-xs-12">
+            <div class="alert alert-secondary alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p><strong>Admin Comments:</strong></p>
+                {{$post->remarks}}
+            </div>
+
+        </div>
+        @if ((Auth::user()->role == config('constants.user_roles.superUser')
+        || Auth::user()->role == config('constants.user_roles.admin'))
+        && ($post->is_approved == config('constants.is_approved.no')))
+        <div class="row">
+            <div class="col-md-8 mx-auto col-sm-12 col-xs-12">
+                <div class="pull-right">
+                    <form action="{{route('admin.approve')}}" method="post">
+                        @csrf
+                        <input type="hidden" value="{{$post->pid}}" name="pid">
+                        <button type="submit" class="btn btn-outline-success"> Approve </button>
+                        <a href="" class="btn btn-outline-danger ml-2" data-toggle="modal"
+                            data-target="#rejectModal">Reject</a>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        @endif
+    </div>
+    @endif
     @endif
     @endauth
     <div class="row">
-        {{Auth::user()->role == config('constants.user_roles.superUser')}}
         <div class="col-md-12 mt-4">
-            @if ((Auth::user()->role == config('constants.user_roles.superUser')
-            || Auth::user()->role == config('constants.user_roles.admin'))
-            && ($post->is_approved == config('constants.is_approved.no')))
-            <div class="row">
-                <div class="col-md-8 mx-auto col-sm-12 col-xs-12">
-                    <div class="pull-right">
-                        <form action="{{route('admin.approve')}}" method="post">
-                            @csrf
-                            <input type="hidden" value="{{$post->pid}}" name="pid">
-                            <button type="submit" class="btn btn-outline-success"> Approve </button>
-                            <a href="" class="btn btn-outline-danger ml-2" data-toggle="modal"
-                                data-target="#rejectModal">Reject</a>
-                        </form>
-                    </div>
 
-                </div>
-            </div>
-            @endif
+
             <div class="col-md-8 mx-auto col-sm-12 col-xs-12">
                 <h1> {{$post->title}} </h1>
-                <small>
-                    <p style="color: gray">{{date('d M, Y', strtotime($post->created_at))}}
-                        <span class="separator">&nbsp; • &nbsp;</span>
-                        <i class="fa fa-clock-o"></i> {{$post->read_time}} min read</p>
-                </small>
-                <small>
-                    <p style="color: gray">Updated: {{$post->updated_at}}
-                </small>
-                <p> {!! $post->content !!} </p>
+                <div class="postinfo">
+                    <small>
+                        <p style="color: gray">{{date('d M, Y', strtotime($post->created_at))}}
+                            <span class="separator">&nbsp; • &nbsp;</span>
+                            <i class="fa fa-clock-o"></i> {{$post->read_time}} min read</p>
+                    </small>
+                    <small>
+                        @if ($post->created_at != $post->updated_at)
+                        <p style="color: gray">Updated: {{date('d M, Y', strtotime($post->updated_at))}}
+                        @endif
+                    </small>
+                </div>
+                <div class="postbody">{!! $post->content !!}</div>
+                {{-- <p style="font-size: 18px !important"> {!! $post->content !!} </p> --}}
             </div>
         </div>
     </div>

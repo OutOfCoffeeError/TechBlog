@@ -17,7 +17,8 @@ return [
     ],
     'is_approved' => [
         'yes' => 1,
-        'no' => 0
+        'no' => 0,
+        'rejected' => -1
     ],
     'post_id_length' => 11,
     'read_time' => 250

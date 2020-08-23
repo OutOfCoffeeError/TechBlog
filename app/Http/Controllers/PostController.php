@@ -18,6 +18,7 @@ class PostController extends Controller
     public function __construct(PostDetails $postDetails, PostMaster $postMaster)
     {
         $this->middleware('auth');
+        $this->middleware('checkXSS');
 
         $this->postDetails = $postDetails;
         $this->postMaster = $postMaster;
@@ -76,6 +77,8 @@ class PostController extends Controller
 
             //Save post data to post detail table
             $postContents = $request->input('ckcontentbody');
+            error_log($postContents);
+            error_log( filter_var ( $postContents, FILTER_SANITIZE_STRING));
             $readTime = $this->getReadTime($postContents);
             $this->postDetails->pid = $postId;
             $this->postDetails->title = $request->input('title');
@@ -150,9 +153,11 @@ class PostController extends Controller
             'tags' => 'required'
         ]);
 
+        if(CommonHelper::checkXSS($request->input('ckcontentbody'))) {
+            return redirect()->back()->with('error', 'Invalid Content');
+        }
         // Initiate a database transaction
         DB::transaction(function ()  use ($request, $id) {
-            error_log('ID ' . $id);
             $postMaster = PostMaster::find($id);
             $postDetails = PostDetails::find($id);
             // $postMaster = PostMaster::where('pid', '=', $id)->first();
@@ -186,11 +191,7 @@ class PostController extends Controller
     {
         return DB::transaction(function () use ($id) {
             $post = PostMaster::where('pid', $id)->get();
-            /**
-             * To Do
-             * Add check to see if user is super admin. or maybe make different controller for him?
-             */
-            error_log("count is: " . count($post));
+
             if (count($post) < 1) {
                 return redirect()->back()->with('error', 'Post does not exist.');
             }
@@ -199,8 +200,7 @@ class PostController extends Controller
                 return redirect()->back()->with('error', 'You are not authorized!');
             }
             PostMaster::where('pid', $id)->update(['deleted' => config('constants.is_deleted.deleted')]);
-            error_log("POST DELETED");
-            return redirect()->back()->with('success', 'Post Deleted');
+            return redirect('home')->with('success', 'Post Deleted');
         });
     }
 
@@ -216,7 +216,7 @@ class PostController extends Controller
                 if (count($post) == 0) {
                     return redirect()->back()->with('error', 'Invalid Post');
                 }
-                return redirect()->back()->with('post', $post[0]);
+                return redirect()->back()->with('post', $post[0])->with('success', 'Post Visibility Changed');
             } catch (Exception $e) {
                 Log::error('PostController->' . $e);
                 return redirect()->back()->with('error', 'Something went wrong');
