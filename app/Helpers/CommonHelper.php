@@ -1,5 +1,7 @@
 <?php 
 namespace App\Helpers;
+
+use App\Mail\PostApproval;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -70,12 +72,16 @@ class CommonHelper {
      * Mail Utility
      */
     public static function sendMail() {
-        Mail::send('emails.test', [], function ($message) {
-            // $message->from('shubhampawarluk3@gmail.com', 'Shubham Pawar');
-            // $message->sender('john@johndoe.com', 'John Doe');
-            $message->to('shubhampawar16298@gmail.com', 'Shubham Pawar');
-            $message->subject('just another Subject');
-        });
+        // Mail::queue('emails.test', [], function ($message) {
+        //     // $message->from('shubhampawarluk3@gmail.com', 'Shubham Pawar');
+        //     // $message->sender('john@johndoe.com', 'John Doe');
+        //     $message->to('shubhampawar16298@gmail.com', 'Shubham Pawar');
+        //     $message->subject('just another Subject');
+        // });
+
+        Mail::to('shubhampawar16298@gmail.com')
+            ->cc('shubhampawarluk3@gmail.com')
+            ->queue(new PostApproval());
     }
      
 }
