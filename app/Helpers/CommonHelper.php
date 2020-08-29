@@ -71,7 +71,7 @@ class CommonHelper {
     /**
      * Mail Utility
      */
-    public static function sendMail() {
+    public static function sendMail($userData, $title, $status, $pid, $remark) {
         // Mail::queue('emails.test', [], function ($message) {
         //     // $message->from('shubhampawarluk3@gmail.com', 'Shubham Pawar');
         //     // $message->sender('john@johndoe.com', 'John Doe');
@@ -79,9 +79,8 @@ class CommonHelper {
         //     $message->subject('just another Subject');
         // });
 
-        Mail::to('shubhampawar16298@gmail.com')
-            ->cc('shubhampawarluk3@gmail.com')
-            ->queue(new PostApproval());
+        Mail::to($userData[0]->email)
+        ->queue(new PostApproval($userData[0]->name, $title, $status, $pid, $remark));
     }
      
 }

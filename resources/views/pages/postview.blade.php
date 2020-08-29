@@ -76,6 +76,7 @@
             </div>
 
         </div>
+    @endif
         @if ((Auth::user()->role == config('constants.user_roles.superUser')
         || Auth::user()->role == config('constants.user_roles.admin'))
         && ($post->is_approved == config('constants.is_approved.no')))
@@ -95,7 +96,7 @@
         </div>
         @endif
     </div>
-    @endif
+
     @endif
     @endauth
     <div class="row">
